@@ -24,7 +24,13 @@ The JAR includes Gson, but intentionally does **not** bundle NekoGate API classe
 
 ## Commands
 
-All commands require the permission `nekogate.nametag`.
+All commands require the permission `nekogate.nametag`. NekoGate denies extension permissions by default. Grant it to an administrator in `plugins/NekoGate/permissions.properties`, using the player's UUID:
+
+```properties
+00000000-0000-0000-0000-000000000000=nekogate.nametag
+```
+
+The permissions file is read at NekoGate startup; restart ViaProxy after changing it.
 
 | Command | Description |
 |---|---|
