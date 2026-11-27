@@ -1,7 +1,7 @@
 # NekoGate NameTag
 
 A standalone Java extension for [NekoGate](https://github.com/MITS-CN/SerVer-MInecraft-NEXT).
-It manages persistent player presentation names through the **NekoGate Extension API v1.3**.
+It manages persistent player presentation names through the **NekoGate Extension API v1.4**.
 
 The extension changes presentation data only. It never changes authenticated player names,
 UUIDs, chat message bodies, or message signatures.
@@ -32,7 +32,7 @@ UUIDs, chat message bodies, or message signatures.
 3. Start or restart ViaProxy with NekoGate installed. NekoGate loads extensions at startup using Java `ServiceLoader`.
 
 The JAR bundles Gson but does not bundle NekoGate API classes. The API stubs in `api-stubs/` are compile-time
-snapshots of API v1.3 and are excluded from the extension JAR.
+snapshots of API v1.4 and are excluded from the extension JAR.
 
 ## Commands
 
@@ -107,7 +107,7 @@ atomically moved into place where supported. Other player entries are preserved.
 
 ## Compatibility and scope
 
-- NekoGate Extension API **1.3** (major version 1).
+- NekoGate Extension API **1.4** (major version 1).
 - Java 17+.
 - The core currently applies configured names to chat and the Tab list for Minecraft 26.3.
 - **Overhead entity nametag rewriting is not exposed by the current extension API.** It requires a core-side
