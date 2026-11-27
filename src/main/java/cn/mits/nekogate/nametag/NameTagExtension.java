@@ -46,7 +46,9 @@ public final class NameTagExtension implements NekoGateExtension {
         this.configFile = api.dataDirectory().resolve("name.josn5");
         api.displayNames().reload();
         this.commandSubscription = api.commands().register(
-                "nametag", PERMISSION, "Manage player display names", this::execute);
+                "nametag", PERMISSION, "Manage player display names",
+                java.util.List.of("set", "prefix", "suffix", "color", "gradient", "clear", "reload", "help"),
+                this::execute);
         this.enabled.set(true);
         System.out.println("[NameTag] Enabled (API " + NekoGateAPI.API_VERSION + "."
                 + NekoGateAPI.API_MINOR_VERSION + "), config: " + this.configFile.toAbsolutePath());
