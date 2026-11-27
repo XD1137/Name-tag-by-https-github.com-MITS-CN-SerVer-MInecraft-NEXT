@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 /** Compile-time snapshot of the NekoGate Extension API v1.3. */
 public interface NekoGateAPI {
     int API_VERSION = 1;
-    int API_MINOR_VERSION = 3;
+    int API_MINOR_VERSION = 4;
 
     Path dataDirectory();
     EventBus events();
@@ -34,6 +34,11 @@ public interface NekoGateAPI {
     interface AuditService { void log(String eventType, Map<String, ?> fields); }
     interface CommandRegistry {
         Subscription register(String name, String permission, String description, CommandExecutor executor);
+
+        default Subscription register(String name, String permission, String description,
+                                       List<String> subcommands, CommandExecutor executor) {
+            return register(name, permission, description, executor);
+        }
     }
     @FunctionalInterface interface CommandExecutor { void execute(CommandContext context) throws Exception; }
     interface CommandContext {
