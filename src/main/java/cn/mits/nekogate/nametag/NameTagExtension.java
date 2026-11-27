@@ -140,7 +140,9 @@ public final class NameTagExtension implements NekoGateExtension {
                 String playerName = resolveTarget(args.get(1));
                 synchronized (this) {
                     JsonObject root = readConfig();
-                    entries(root).remove(playerName);
+                    JsonObject configuredPlayers = entries(root);
+                    String existingKey = findExistingKey(configuredPlayers, playerName);
+                    if (existingKey != null) configuredPlayers.remove(existingKey);
                     writeConfig(root);
                     this.api.displayNames().clear(playerName);
                     this.api.displayNames().reload();
@@ -156,10 +158,12 @@ public final class NameTagExtension implements NekoGateExtension {
         synchronized (this) {
             JsonObject root = readConfig();
             JsonObject entries = entries(root);
-            JsonObject player = entries.has(playerName) && entries.get(playerName).isJsonObject()
-                    ? entries.getAsJsonObject(playerName) : new JsonObject();
+            String existingKey = findExistingKey(entries, playerName);
+            String configKey = existingKey == null ? playerName : existingKey;
+            JsonObject player = entries.has(configKey) && entries.get(configKey).isJsonObject()
+                    ? entries.getAsJsonObject(configKey) : new JsonObject();
             mutation.apply(player);
-            entries.add(playerName, player);
+            entries.add(configKey, player);
             writeConfig(root);
 
             // Persisted configuration is authoritative; remove any transient API override
@@ -203,6 +207,13 @@ public final class NameTagExtension implements NekoGateExtension {
             throw new IOException("The 'players' property must be a JSON object");
         }
         return root.getAsJsonObject("players");
+    }
+
+    private static String findExistingKey(JsonObject entries, String playerName) {
+        for (String key : entries.keySet()) {
+            if (key.equalsIgnoreCase(playerName)) return key;
+        }
+        return null;
     }
 
     private static JsonObject currentName(JsonObject player, String fallbackName) {
