@@ -28,12 +28,9 @@ tasks.named('compileJava') {
     dependsOn tasks.named('compileApiStubsJava')
 }
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
-
+// Use the JDK running Gradle instead of requiring a separately installed
+// Java 17 toolchain. Gradle 9 itself already requires Java 17 or newer.
+// --release keeps both the API stubs and extension bytecode Java 17-compatible.
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = 17
