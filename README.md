@@ -12,7 +12,7 @@ UUIDs, chat message bodies, or message signatures.
 - Prefix, display name, suffix, HEX color, and two-color gradient commands.
 - Supports the core's component JSON format, including nested `extra` components.
 - Atomic configuration writes and automatic API reload after edits.
-- Permission-protected `/nametag` command.
+- Permission-protected `/nametag` command with client-side Brigadier completion for its literal subcommands.
 - Existing UUID-keyed entries are left intact for the core's legacy-configuration compatibility.
 
 ## Install
