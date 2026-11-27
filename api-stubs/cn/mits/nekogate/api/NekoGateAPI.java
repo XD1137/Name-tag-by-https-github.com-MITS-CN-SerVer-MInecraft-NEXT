@@ -7,9 +7,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+/** Compile-time snapshot of the NekoGate Extension API v1.3. */
 public interface NekoGateAPI {
     int API_VERSION = 1;
-    int API_MINOR_VERSION = 2;
+    int API_MINOR_VERSION = 3;
+
     Path dataDirectory();
     EventBus events();
     PlayerService players();
