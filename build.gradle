@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+}
+
+group = 'cn.mits'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // The host NekoGate plugin provides these API classes at runtime.
+    // apiStubs is a compile-time snapshot only and is deliberately excluded from the extension JAR.
+    implementation 'com.google.code.gson:gson:2.13.1'
+}
+
+sourceSets {
+    apiStubs {
+        java.srcDir 'api-stubs'
+    }
+    main {
+        compileClasspath += sourceSets.apiStubs.output
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.named('compileApiStubsJava')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+jar {
+    archiveBaseName = 'nekogate-nametag'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // Bundle Gson; never bundle the NekoGate API snapshot.
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'cn/mits/nekogate/api/**'
+}
