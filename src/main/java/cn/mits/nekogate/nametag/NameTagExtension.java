@@ -36,9 +36,6 @@ public final class NameTagExtension implements NekoGateExtension {
     @Override
     public void onEnable(NekoGateAPI api) throws Exception {
         if (api == null) throw new IllegalArgumentException("NekoGate API is required");
-        if (NekoGateAPI.API_VERSION != 1 || NekoGateAPI.API_MINOR_VERSION < 2) {
-            throw new IllegalStateException("NameTag requires NekoGate Extension API v1.2 or newer");
-        }
         this.api = api;
         api.displayNames().reload();
         this.commandSubscription = api.commands().register(
@@ -65,6 +62,17 @@ public final class NameTagExtension implements NekoGateExtension {
             return;
         }
 
+        try {
+            executeSubcommand(context, args);
+        } catch (IllegalArgumentException error) {
+            context.reply("§c[NameTag] " + error.getMessage());
+        } catch (IOException error) {
+            System.err.println("[NameTag] Configuration operation failed: " + error);
+            context.reply("§c[NameTag] Could not update the configuration: " + error.getMessage());
+        }
+    }
+
+    private void executeSubcommand(NekoGateAPI.CommandContext context, java.util.List<String> args) throws Exception {
         switch (args.get(0).toLowerCase(Locale.ROOT)) {
             case "reload" -> {
                 requireArgs(args, 1, "Usage: /nametag reload");
